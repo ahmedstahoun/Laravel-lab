@@ -28,7 +28,7 @@
                 <td>
                     <a href="{{route('posts.show', $post['id'])}}" class="btn btn-info">View</a>
                     <a href="{{route("posts.edit",$post["id"]),"/edit"}}" class="btn btn-primary">Edit</a>
-                    <a href="#" class="btn btn-danger">Delete</a>
+                    <a href="" class="btn btn-danger">Delete</a>
                 </td>
             </tr>
         @endforeach

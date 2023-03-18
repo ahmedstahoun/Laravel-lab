@@ -78,5 +78,10 @@ class PostController extends Controller{
         
     }
     
+    public function destroy(){
+    
+        return redirect()->route('posts.index');
+        
+    }
 
 }
