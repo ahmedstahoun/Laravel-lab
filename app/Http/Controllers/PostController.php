@@ -17,9 +17,11 @@ class PostController extends Controller{
     public function show($id){
 
 
-        $post = post::find($id); 
+        $post =  Post::find($id);
+        $user = User::find($id);
+        return view('post.show', ['post' => $post]);
 
-        return view('post.show',['post'=>$post]);
+        
     }
 
     public function create(){
@@ -52,12 +54,23 @@ class PostController extends Controller{
 
 
     public function edit($id){
+        $users = User::all();
+        $post = Post::find($id);
         
-        return view("post.edit",["id"=> $id]);
+        return view('post.edit', ['post' => $post,'users' => $users]);
     }
 
     public function update(){
+        $id = request()->id;
+        $title = request()->title;
+        $description = request()->description;
+        $postCreator = request()->post_creator;
         
+        Post::where('id', $id)->update([
+            'title' => $title,
+            'description' => $description,
+            'user_id' => $postCreator
+        ]);
         return redirect()->route('posts.index');
         
     }
