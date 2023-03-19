@@ -2,34 +2,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use App\Models\Post;
+use App\Models\User;
 class PostController extends Controller{
 
 
     public function index()
     {
-        $allPosts = [
-            [
-                'id' => 1,
-                'title' => 'Laravel',
-                'posted_by' => 'Ahmed',
-                'created_at' => '2022-08-01 10:00:00'
-            ],
-
-            [
-                'id' => 2,
-                'title' => 'PHP',
-                'posted_by' => 'Mohamed',
-                'created_at' => '2022-08-01 10:00:00'
-            ],
-
-            [
-                'id' => 3,
-                'title' => 'Javascript',
-                'posted_by' => 'Ali',
-                'created_at' => '2022-08-01 10:00:00'
-            ],
-        ];
+        $allPosts = Post::all();
 
         return view('post.index', ['posts' => $allPosts]);
     }
@@ -37,30 +17,34 @@ class PostController extends Controller{
     public function show($id){
 
 
-
-        $post =  [
-            'id' => 3,
-            'title' => 'Javascript',
-            'posted_by' => 'Ali',
-            'created_at' => '2022-08-01 10:00:00',
-            'description' => 'hello description',
-        ];
-
-
-
-
+        $post = post::find($id); 
 
         return view('post.show',['post'=>$post]);
     }
 
     public function create(){
 
+        $users = User::all() ;
 
-        return view('post.create');    
+        return view('post.create',['users'=>$users]);    
     }
 
-    public function store(){
-        
+    public function store(Request $request){
+
+
+        $title = request()->title;
+        $description = request()->description;
+        $postCreator = request()->post_creator;
+
+        // $data= $request->all();
+        Post::create([
+            'title'=> $title,
+            'description'=> $description,
+            'user_id' => $postCreator,
+
+
+        ]);
+
         return redirect()->route('posts.index');
         
     }
@@ -78,8 +62,10 @@ class PostController extends Controller{
         
     }
     
-    public function destroy(){
-    
+    public function destroy($id){
+        
+        $post = post::find($id);
+        $post->delete();
         return redirect()->route('posts.index');
         
     }
