@@ -4,12 +4,13 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Post;
 use App\Models\User;
+use App\Models\Comment;
 class PostController extends Controller{
 
 
     public function index()
     {
-        $allPosts = Post::all();
+        $allPosts = Post::paginate(3);
 
         return view('post.index', ['posts' => $allPosts]);
     }
@@ -18,8 +19,9 @@ class PostController extends Controller{
 
 
         $post =  Post::find($id);
-        $user = User::find($id);
-        return view('post.show', ['post' => $post]);
+        $comments = $post->comments;
+        return view('post.show', ['post' => $post,'comments' => $comments]);
+       
 
         
     }
