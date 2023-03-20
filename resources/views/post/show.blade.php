@@ -33,10 +33,13 @@
             <div class="card-header">
                 Comments
             </div>
+            
             @foreach ($comments as $comment)
+            
             <div class="card m-3 col-8">
                 <div class="card-body">
-                    <span class="fw-bold">{{ $post->user->name }}</span>
+                    
+                    <span class="fw-bold">{{ $comment->user->name }}</span>
                     <span class="text-muted pl-4">{{ $comment->created_at->format('20y/m/d') }}</span>
                     <p class="card-text fs-6 mt-2">{{ $comment->body }}</p>
                 </div>
@@ -51,7 +54,16 @@
                             style="height:80px;"></textarea>
                     </h3>
                 </div>
+                <div>
+                    <label for="post_creator" class="form-label">Post Creator</label>
+                    <select name="user_id" class="form-control">
+                        @foreach($users as $user)
+                            <option value="{{$user->id}}">{{$user->name}}</option>
+                        @endforeach
+                    </select>
+                </div>
                 <button type="submit" class=" btn btn-outline-success m-3">Comment</button>
+
             </form>
         </div>
         

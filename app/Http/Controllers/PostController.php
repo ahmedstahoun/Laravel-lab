@@ -20,7 +20,8 @@ class PostController extends Controller{
 
         $post =  Post::find($id);
         $comments = $post->comments;
-        return view('post.show', ['post' => $post,'comments' => $comments]);
+        $users = User::all();
+        return view('post.show', ['post' => $post,'comments' => $comments,'users'=>$users]);
        
 
         
