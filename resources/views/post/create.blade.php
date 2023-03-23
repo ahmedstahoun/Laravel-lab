@@ -15,7 +15,7 @@ create
     </div>
 @endif
 
-<form class="mt-5" action="{{route('posts.store')}}" method="POST">
+<form class="mt-5" action="{{route('posts.store')}}" method="POST"  enctype="multipart/form-data">
     @csrf
     <div class="mb-3">
       <label for="exampleInputEmail1" class="form-label">Title</label>
@@ -37,10 +37,8 @@ create
       </div>
       <div class="mb-3">
         <label for="exampleInputImage" class="form-label fs-4">Image </label><i class="text-secondary"> (Optional)</i>
-        <input type="file" name="image" accept=".jpg,.png" class="form-control" id="exampleInputImage">
-        @error('image')
-            <div class="alert alert-danger my-1">{{$message}}</div>
-        @enderror
+        <input type="file" name="image" accept=".jpeg,.png,.jpg" class="form-control" id="exampleInputImage">
+        
     </div>
     
     <button type="submit" class="btn btn-success">Store</button>

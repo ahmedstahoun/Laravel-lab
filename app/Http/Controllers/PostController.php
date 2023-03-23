@@ -56,13 +56,13 @@ class PostController extends Controller{
             'user_id' => $request->post_creator
         ]);
 
-        // if ($request->hasFile('image')) {
-        //     $image = $request->file('image');
-        //     $filename = $image->getClientOriginalName();
-        //     $path = Storage::putFileAs('posts', $image, $filename);
-        //     $post->image_path = $path;
-        //     $post->save();
-        // }
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $filename = $image->getClientOriginalName();
+            $path = Storage::putFileAs('postsImgs', $image, $filename);
+            $post->image_path = $path;
+            $post->save();
+        }
 
         return redirect()->route('posts.index');
         
@@ -77,26 +77,43 @@ class PostController extends Controller{
         return view('post.edit', ['post' => $post,'users' => $users]);
     }
 
-    public function update(UpdatePostRequest $request){
+    public function update($post,UpdatePostRequest $request){
         $id = request()->id;
         $title = request()->title;
         $description = request()->description;
         $postCreator = request()->post_creator;
+        $post = Post::findOrFail($post);
+
+        if ($request->hasFile('image')) {
+            if ($post->image_path) {
+                Storage::delete($post->image_path);
+            }
+            $image = $request->file('image');
+            $filename = $image->getClientOriginalName();
+            $path = Storage::putFileAs('postsImgs', $image, $filename);
+            $post->image_path = $path;
+        }
         
-        Post::where('id', $id)->update([
-            'title' => $title,
-            'slug' => Str::slug($title),
-            'description' => $description,
-            'user_id' => $postCreator
+        
+
+        $post->update([
+            'title' => $request->title,
+            'slug' => Str::slug($request->title),
+            'description' => $request->description,
+            'user_id' => $request->post_creator,
         ]);
         return to_route('posts.index');
         
     }
     
-    public function destroy($id){
+    public function destroy($post){
         
-        $post = post::find($id);
+        $post = Post::findOrFail($post);
+        if ($post->image_path && Storage::exists($post->image_path)) {
+            Storage::delete($post->image_path);
+        }
         $post->delete();
+    
         return redirect()->route('posts.index');
         
     }

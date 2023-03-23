@@ -25,7 +25,7 @@ class StorePostRequest extends FormRequest
             'title'=>['required','min:3','unique:posts'],
             'description'=>['required','min:10'],
             'post_creator' => ['required','exists:users,id'],
-            // 'image' => ['mimes:jpeg,png']
+            'image' => ['mimes:jpeg,png']
         ];
     }
 
@@ -34,9 +34,9 @@ class StorePostRequest extends FormRequest
     return [
         'title.required' => 'Title field must be filled.',
         'description.required' => 'Description field must be filled.',
-        // 'image' => [
-        //     'mimes' => 'An Image Must be jpeg or png Only'
-        // ]
+        'image' => [
+            'mimes' => 'An Image Must be jpeg or png Only'
+        ]
     ];
 }
 
