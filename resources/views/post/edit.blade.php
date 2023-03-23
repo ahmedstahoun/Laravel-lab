@@ -7,6 +7,16 @@ Update
 
 
 @section('content')
+@if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+
 <form class='my-5' action="{{route('posts.update',['post' => $post['id']])}}" method="POST">
     @csrf
     @method('PUT')
@@ -14,7 +24,7 @@ Update
     <div class="mb-3">
         <label for="exampleInputTitle" class=" form-label fs-4">Title</label>
         <input type="text" class="form-control" name="title" value="{{ $post->title }}"
-            placeholder="Enter Post Title.." id=" exampleInputTitle" pattern="^[A-Za-z]+$" required>
+            placeholder="Enter Post Title.." id=" exampleInputTitle" required>
     </div>
     <div class="form-floating mb-3">
         <p class="fs-4">Description</p>

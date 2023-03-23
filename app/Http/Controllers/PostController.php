@@ -1,10 +1,16 @@
 <?php
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StorePostRequest;
+use App\Http\Requests\UpdatePostRequest;
 use Illuminate\Http\Request;
 use App\Models\Post;
 use App\Models\User;
 use App\Models\Comment;
+use Illuminate\Support\Str;
+use Symfony\Contracts\Service\Attribute\Required;
+use Illuminate\Support\Facades\Storage;
+
 class PostController extends Controller{
 
 
@@ -15,10 +21,10 @@ class PostController extends Controller{
         return view('post.index', ['posts' => $allPosts]);
     }
 
-    public function show($id){
+    public function show($post){
 
 
-        $post =  Post::find($id);
+        $post =  Post::find($post);
         $comments = $post->comments;
         $users = User::all();
         return view('post.show', ['post' => $post,'comments' => $comments,'users'=>$users]);
@@ -34,21 +40,27 @@ class PostController extends Controller{
         return view('post.create',['users'=>$users]);    
     }
 
-    public function store(Request $request){
+    public function store(StorePostRequest $request){
 
-
+       
         $title = request()->title;
         $description = request()->description;
         $postCreator = request()->post_creator;
 
         // $data= $request->all();
-        Post::create([
-            'title'=> $title,
-            'description'=> $description,
-            'user_id' => $postCreator,
-
-
+        $post = Post::create([
+            'title' =>  $request->title,
+            'description' => $request->description,
+            'user_id' => $request->post_creator
         ]);
+
+        // if ($request->hasFile('image')) {
+        //     $image = $request->file('image');
+        //     $filename = $image->getClientOriginalName();
+        //     $path = Storage::putFileAs('posts', $image, $filename);
+        //     $post->image_path = $path;
+        //     $post->save();
+        // }
 
         return redirect()->route('posts.index');
         
@@ -56,14 +68,14 @@ class PostController extends Controller{
 
 
 
-    public function edit($id){
+    public function edit($post){
         $users = User::all();
-        $post = Post::find($id);
+        $post = Post::find($post);
         
         return view('post.edit', ['post' => $post,'users' => $users]);
     }
 
-    public function update(){
+    public function update(UpdatePostRequest $request){
         $id = request()->id;
         $title = request()->title;
         $description = request()->description;
@@ -71,10 +83,11 @@ class PostController extends Controller{
         
         Post::where('id', $id)->update([
             'title' => $title,
+            'slug' => Str::slug($title),
             'description' => $description,
             'user_id' => $postCreator
         ]);
-        return redirect()->route('posts.index');
+        return to_route('posts.index');
         
     }
     
