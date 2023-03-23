@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Auth;
 Route::get('/posts', [PostController::class, 'index'])->name('posts.index')->middleware('auth');
 
 
-Route::group([],function(){
+Route::group(['middleware'=>['auth']],function(){
     Route::get('/posts/create',[PostController::class,'create'])-> name('posts.create');
 
     Route::post('/posts',[PostController::class,'store'])-> name('posts.store');
