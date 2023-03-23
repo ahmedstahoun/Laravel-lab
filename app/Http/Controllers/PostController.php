@@ -10,6 +10,8 @@ use App\Models\Comment;
 use Illuminate\Support\Str;
 use Symfony\Contracts\Service\Attribute\Required;
 use Illuminate\Support\Facades\Storage;
+use App\Jobs\PruneOldPostsJob;
+
 
 class PostController extends Controller{
 
@@ -97,6 +99,11 @@ class PostController extends Controller{
         $post->delete();
         return redirect()->route('posts.index');
         
+    }
+
+    public function removeOldPosts() {
+        PruneOldPostsJob::dispatch();
+        return redirect()->route("posts.index");
     }
 
 }
