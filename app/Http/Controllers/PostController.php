@@ -49,7 +49,7 @@ class PostController extends Controller{
         $description = request()->description;
         $postCreator = request()->post_creator;
 
-        // $data= $request->all();
+        
         $post = Post::create([
             'title' =>  $request->title,
             'description' => $request->description,
@@ -59,8 +59,8 @@ class PostController extends Controller{
         if ($request->hasFile('image')) {
             $image = $request->file('image');
             $filename = $image->getClientOriginalName();
-            $path = Storage::putFileAs('postsImgs', $image, $filename);
-            $post->image_path = $path;
+            $path = $request->file('image')->storeAs('postsImgs', $filename, 'public');
+            $post->image_path= $path;
             $post->save();
         }
 
@@ -86,12 +86,12 @@ class PostController extends Controller{
 
         if ($request->hasFile('image')) {
             if ($post->image_path) {
-                Storage::delete($post->image_path);
+                Storage::delete('public/'. $post->image_path);
             }
             $image = $request->file('image');
             $filename = $image->getClientOriginalName();
-            $path = Storage::putFileAs('postsImgs', $image, $filename);
-            $post->image_path = $path;
+            $path = $request->file('image')->storeAs('postsImgs', $filename, 'public');
+            $post->image_path= $path;
         }
         
         
@@ -109,8 +109,8 @@ class PostController extends Controller{
     public function destroy($post){
         
         $post = Post::findOrFail($post);
-        if ($post->image_path && Storage::exists($post->image_path)) {
-            Storage::delete($post->image_path);
+        if ($post->image_path && Storage::exists('public/'.$post->image_path)) {
+            Storage::delete('public/'.$post->image_path);
         }
         $post->delete();
     

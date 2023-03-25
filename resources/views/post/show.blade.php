@@ -66,6 +66,7 @@
 
             </form>
         </div>
+        <img src="{{asset('/storage/'. $post->image_path)}}" alt="">
         
     </div>
 
