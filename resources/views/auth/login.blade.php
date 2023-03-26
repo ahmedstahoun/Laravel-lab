@@ -52,10 +52,23 @@
                         </div>
 
                         <div class="row mb-0">
-                            <div class="col-md-8 offset-md-4">
+                            <div class="col-md-8 offset-md-4 d-flex justify-content-between">
+                               <div class="w-25 h-25">
                                 <button type="submit" class="btn btn-primary">
                                     {{ __('Login') }}
                                 </button>
+                              </div>
+                                <div class="w-25 h-25">
+                                    <a href="{{route('githublogin')}}" class="btn btn-dark ">
+                                    GitHub
+                                    </a> 
+                                </div>
+                               
+                                <div class="w-25 h-25">
+                                    <a href="{{route('googlelogin')}}" class="btn btn-success  ">
+                                        Google
+                                    </a>
+                                </div>
 
                                 @if (Route::has('password.request'))
                                     <a class="btn btn-link" href="{{ route('password.request') }}">

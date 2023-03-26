@@ -3,6 +3,7 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\CommentController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -37,6 +38,12 @@ Route::group(['middleware'=>['auth']],function(){
     Route::delete('/posts/{post}', [PostController::class,"destroy"])->name("posts.destroy");
 });
 
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::get('/auth/github/redirect',[App\Http\Controllers\PostController::class,'githubRedirect'])->name('githublogin');
+Route::get('/auth/github/callback',[App\Http\Controllers\PostController::class,'githubCallback']);
+Route::get('/auth/google/redirect',[PostController::class,'googleredirect'])->name('googlelogin');
+Route::get('/auth/google/callback',[PostController::class,'googlecallback']);
 
 
 Route::post('/posts/{post}/comment', [CommentController::class,"store"])->name("comments.store");
